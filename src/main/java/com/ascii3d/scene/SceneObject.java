@@ -1,8 +1,5 @@
 package com.ascii3d.scene;
 
-/**
- * A renderable object: mesh + transform + optional name.
- */
 public class SceneObject {
 
     public final String    name;

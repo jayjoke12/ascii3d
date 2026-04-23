@@ -1,16 +1,12 @@
 package com.ascii3d.engine;
 
-/**
- * Software framebuffer: per-pixel intensity [0..1] + depth (z-buffer).
- * The ASCII renderer samples this to produce text output.
- */
 public class Framebuffer {
 
     public final int width;
     public final int height;
 
-    private final double[] intensity;  // [0..1] brightness per pixel
-    private final double[] depth;      // z-buffer (NDC z, smaller = closer)
+    private final double[] intensity;
+    private final double[] depth;
 
     public Framebuffer(int width, int height) {
         this.width     = width;
@@ -26,7 +22,6 @@ public class Framebuffer {
         }
     }
 
-    /** Attempt to write a pixel — only succeeds if z is closer than current depth */
     public boolean writePixel(int x, int y, double z, double value) {
         if (x < 0 || x >= width || y < 0 || y >= height) return false;
         int idx = y * width + x;

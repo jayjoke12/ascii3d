@@ -19,9 +19,6 @@ import java.util.*;
  * Quads (4-vertex faces) are automatically triangulated.
  * Negative indices are resolved relative to current vertex count.
  *
- * Usage:
- *   Mesh mesh = ObjLoader.load("path/to/model.obj");
- *   Mesh mesh = ObjLoader.load("path/to/model.obj", 2.0); // with scale
  */
 public class ObjLoader {
 
@@ -36,8 +33,8 @@ public class ObjLoader {
     public static Mesh load(Path path, double scale) throws IOException {
         List<Vec3> positions = new ArrayList<>();
         List<Vec3> normals   = new ArrayList<>();
-        List<int[]> posIdx   = new ArrayList<>();  // triangle position indices
-        List<int[]> nrmIdx   = new ArrayList<>();  // triangle normal  indices (may be empty)
+        List<int[]> posIdx   = new ArrayList<>();
+        List<int[]> nrmIdx   = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(path)) {
             String line;
@@ -55,7 +52,6 @@ public class ObjLoader {
                     case "vn" -> normals.add(new Vec3(d(tok[1]), d(tok[2]), d(tok[3])).normalize());
 
                     case "f" -> {
-                        // Parse each vertex reference in the face
                         int vertCount = tok.length - 1;
                         int[] pi = new int[vertCount];
                         int[] ni = new int[vertCount];
@@ -70,7 +66,6 @@ public class ObjLoader {
                             }
                         }
 
-                        // Fan triangulation: (0,1,2), (0,2,3), (0,3,4) ...
                         for (int i = 1; i < vertCount - 1; i++) {
                             posIdx.add(new int[]{pi[0], pi[i], pi[i + 1]});
                             nrmIdx.add(hasNormals
@@ -115,7 +110,7 @@ public class ObjLoader {
             for (int i = 0; i < verts.length; i++)
                 vertNormals[i] = acc[i].length() < 1e-10 ? Vec3.UP : acc[i].normalize();
         } else {
-            // Compute smooth normals from geometry
+
             vertNormals = Mesh.computeNormals(verts, idx);
         }
 
@@ -123,11 +118,11 @@ public class ObjLoader {
         return new Mesh(name, verts, idx, vertNormals);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+
 
     private static double d(String s) { return Double.parseDouble(s); }
 
-    /** Resolve a 1-based (or negative) OBJ index to a 0-based Java index */
+
     private static int resolveIdx(String token, int count) {
         int i = Integer.parseInt(token);
         return i < 0 ? count + i : i - 1;

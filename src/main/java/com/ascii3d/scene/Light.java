@@ -2,16 +2,14 @@ package com.ascii3d.scene;
 
 import com.ascii3d.math.Vec3;
 
-/**
- * Simple directional light with ambient + diffuse + specular components.
- */
+
 public class Light {
 
-    public Vec3   direction;   // normalized, points FROM light TO scene
-    public double ambient;     // [0..1]
-    public double diffuse;     // [0..1]
-    public double specular;    // [0..1]
-    public int    shininess;   // Phong exponent
+    public Vec3   direction;
+    public double ambient;
+    public double diffuse;
+    public double specular;
+    public int    shininess;
 
     public Light(Vec3 direction, double ambient, double diffuse,
                  double specular, int shininess) {
@@ -22,7 +20,7 @@ public class Light {
         this.shininess = shininess;
     }
 
-    /** Default pleasant directional light */
+
     public static Light defaultLight() {
         return new Light(new Vec3(-1, -2, -1), 0.15, 0.75, 0.25, 16);
     }

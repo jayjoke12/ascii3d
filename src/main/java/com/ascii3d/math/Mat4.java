@@ -1,17 +1,14 @@
 package com.ascii3d.math;
 
-/**
- * Column-major 4×4 matrix.
- * Pipeline: Model → World (model) → View (view) → Clip (projection) → NDC → Screen
- */
+
 public final class Mat4 {
 
-    // m[col][row]
+
     private final double[][] m;
 
     private Mat4(double[][] m) { this.m = m; }
 
-    // ── Factories ──────────────────────────────────────────────────────────────
+
 
     public static Mat4 identity() {
         return new Mat4(new double[][]{
@@ -41,7 +38,6 @@ public final class Mat4 {
 
     public static Mat4 scale(double s) { return scale(s, s, s); }
 
-    /** Rotation around the X axis (radians) */
     public static Mat4 rotationX(double a) {
         double c = Math.cos(a), s = Math.sin(a);
         double[][] m = copyOf(identity().m);
@@ -50,7 +46,6 @@ public final class Mat4 {
         return new Mat4(m);
     }
 
-    /** Rotation around the Y axis (radians) */
     public static Mat4 rotationY(double a) {
         double c = Math.cos(a), s = Math.sin(a);
         double[][] m = copyOf(identity().m);
@@ -59,7 +54,6 @@ public final class Mat4 {
         return new Mat4(m);
     }
 
-    /** Rotation around the Z axis (radians) */
     public static Mat4 rotationZ(double a) {
         double c = Math.cos(a), s = Math.sin(a);
         double[][] m = copyOf(identity().m);
@@ -75,9 +69,9 @@ public final class Mat4 {
      * @param up     world-up vector
      */
     public static Mat4 lookAt(Vec3 eye, Vec3 target, Vec3 up) {
-        Vec3 f = target.sub(eye).normalize();        // forward
-        Vec3 r = f.cross(up).normalize();            // right
-        Vec3 u = r.cross(f);                         // true up
+        Vec3 f = target.sub(eye).normalize();
+        Vec3 r = f.cross(up).normalize();
+        Vec3 u = r.cross(f);
 
         double[][] m = copyOf(identity().m);
         m[0][0]= r.x; m[1][0]= r.y; m[2][0]= r.z;
@@ -108,9 +102,7 @@ public final class Mat4 {
         return new Mat4(m);
     }
 
-    // ── Operations ─────────────────────────────────────────────────────────────
 
-    /** Matrix × Matrix */
     public Mat4 mul(Mat4 o) {
         double[][] r = new double[4][4];
         for (int col = 0; col < 4; col++)
@@ -120,7 +112,6 @@ public final class Mat4 {
         return new Mat4(r);
     }
 
-    /** Matrix × Vec4 */
     public Vec4 mul(Vec4 v) {
         return new Vec4(
             m[0][0]*v.x + m[1][0]*v.y + m[2][0]*v.z + m[3][0]*v.w,
@@ -130,17 +121,14 @@ public final class Mat4 {
         );
     }
 
-    /** Transform a point (w=1), returns Vec3 after perspective divide */
     public Vec3 transformPoint(Vec3 v) {
         return mul(Vec4.point(v)).perspectiveDivide();
     }
 
-    /** Transform a direction (w=0), no translation */
     public Vec3 transformDir(Vec3 v) {
         return mul(Vec4.direction(v)).xyz();
     }
 
-    // ── Helpers ────────────────────────────────────────────────────────────────
 
     private static double[][] copyOf(double[][] src) {
         double[][] dst = new double[4][4];

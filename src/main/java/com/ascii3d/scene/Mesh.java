@@ -4,15 +4,13 @@ import com.ascii3d.math.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Triangle mesh: vertices + indices + optional per-vertex normals.
- */
+
 public class Mesh {
 
     public final String name;
     public final Vec3[] vertices;
-    public final int[]  indices;   // triples: (i0,i1,i2) per triangle
-    public final Vec3[] normals;   // per-vertex normals (may be null)
+    public final int[]  indices;
+    public final Vec3[] normals;
 
     public Mesh(String name, Vec3[] vertices, int[] indices, Vec3[] normals) {
         this.name     = name;
@@ -23,25 +21,25 @@ public class Mesh {
 
     public int triangleCount() { return indices.length / 3; }
 
-    // ── Built-in geometry factories ───────────────────────────────────────────
+
 
     public static Mesh cube(double size) {
         double h = size / 2.0;
         Vec3[] v = {
-            // Front face
+
             new Vec3(-h,-h, h), new Vec3( h,-h, h),
             new Vec3( h, h, h), new Vec3(-h, h, h),
-            // Back face
+
             new Vec3(-h,-h,-h), new Vec3( h,-h,-h),
             new Vec3( h, h,-h), new Vec3(-h, h,-h),
         };
         int[] idx = {
-            0,1,2, 2,3,0,   // front
-            4,6,5, 6,4,7,   // back
-            4,0,3, 3,7,4,   // left
-            1,5,6, 6,2,1,   // right
-            3,2,6, 6,7,3,   // top
-            4,5,1, 1,0,4    // bottom
+            0,1,2, 2,3,0,
+            4,6,5, 6,4,7,
+            4,0,3, 3,7,4,
+            1,5,6, 6,2,1,
+            3,2,6, 6,7,3,
+            4,5,1, 1,0,4
         };
         return new Mesh("cube", v, idx, computeNormals(v, idx));
     }
@@ -122,9 +120,9 @@ public class Mesh {
         return new Mesh("torus", va, ia, computeNormals(va, ia));
     }
 
-    // ── Normal computation ────────────────────────────────────────────────────
 
-    /** Compute smooth vertex normals by averaging face normals */
+
+
     public static Vec3[] computeNormals(Vec3[] verts, int[] idx) {
         Vec3[] normals = new Vec3[verts.length];
         for (int i = 0; i < normals.length; i++) normals[i] = Vec3.ZERO;

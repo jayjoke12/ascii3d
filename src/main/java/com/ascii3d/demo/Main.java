@@ -12,12 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ASCII 3D Engine — entry point.
- *
  * ── Usage ──────────────────────────────────────────────────────────────────
- *
- *  No arguments → default demo (cube + torus + sphere)
- *
  *  With arguments:
  *    java -cp target/classes com.ascii3d.demo.Main [options] [file.obj ...]
  *

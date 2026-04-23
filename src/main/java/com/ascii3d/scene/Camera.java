@@ -11,8 +11,8 @@ public class Camera {
     public Vec3   position;
     public Vec3   target;
     public Vec3   up;
-    public double fovY;    // vertical FOV in radians
-    public double aspect;  // width / height
+    public double fovY;
+    public double aspect;
     public double near;
     public double far;
 
@@ -30,17 +30,16 @@ public class Camera {
     public Mat4 viewMatrix()       { return Mat4.lookAt(position, target, up); }
     public Mat4 projectionMatrix() { return Mat4.perspective(fovY, aspect, near, far); }
 
-    /** Combined view-projection matrix */
+
     public Mat4 viewProjection()   { return projectionMatrix().mul(viewMatrix()); }
 
-    /** Orbit the camera horizontally (radians) around the target */
     public void orbitY(double delta) {
         Vec3 offset = position.sub(target);
         Mat4 rot = Mat4.rotationY(delta);
         position = target.add(rot.transformDir(offset));
     }
 
-    /** Orbit the camera vertically (radians) around the target */
+
     public void orbitX(double delta) {
         Vec3 right  = position.sub(target).normalize().cross(up).normalize();
         Vec3 offset = position.sub(target);
